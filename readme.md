@@ -5,9 +5,8 @@
 The File Management System is a RESTful API built with Gin and Go. It includes functionalities for user authentication, file upload and management, retrieval, sharing, searching, and caching. The system uses JWT for authentication and Redis for caching file metadata.
 
 
-## Setup Instructions
 
-### Prerequisites
+### Tech Stack Used
 
 - Go (1.18 or later)
 - MySQL
@@ -73,8 +72,10 @@ The File Management System is a RESTful API built with Gin and Go. It includes f
 #### Response Body
 ```json
    {
-      "file_id": 1,
+      
       "public_url": "https://yourbucket.s3.amazonaws.com/file.jpg"
+      "message": "File uploaded successfully"
+
    }
 
 ```
@@ -123,7 +124,7 @@ The File Management System is a RESTful API built with Gin and Go. It includes f
 ### 5.Search files
 
 ```http
-   POST /protected/upload
+   POST /protected/search?name=xxx&date=xxxx
 ```
 | Header          | Type     | Description                |
 | :--------       | :------- | :------------------------- |
@@ -177,24 +178,32 @@ The File Management System is a RESTful API built with Gin and Go. It includes f
 ### Users Table
 
 ```sql
+    CREATE DATABASE authdb;
+
+    USE authdb;
+
     CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        created_at DATETIME
     );
+
 
 ```
 ### Files Table
 
 ```sql
     CREATE TABLE files (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id),
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT NOT NULL,
         file_name VARCHAR(255) NOT NULL,
         file_size BIGINT NOT NULL,
         upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        s3_url TEXT NOT NULL
+        s3_url TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(id)
     );
+
 ```
 ### Database Indexing
 
