@@ -1,5 +1,5 @@
 # File Management System
-
+#### TradeMarkia 2024-Backend Intern Assignment
 ## Overview
 
 The File Management System is a RESTful API built with Gin and Go. It includes functionalities for user authentication, file upload and management, retrieval, sharing, searching, and caching. The system uses JWT for authentication and Redis for caching file metadata.
